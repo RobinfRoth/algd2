@@ -16,6 +16,14 @@ public class SortedBag<E extends Comparable<? super E>> extends AbstractArrayCol
         return Arrays.binarySearch(data, 0, size, o);
     }
 
+    private void shiftLeft(int startIndex) {
+        while (startIndex < size-1) {
+            data[startIndex] = data[startIndex+1];
+            startIndex++;
+        }
+        data[size-1] = null;
+    }
+
     private void shiftRight(int startIndex) {
         int i = size;
         while (i > startIndex) {
@@ -48,8 +56,14 @@ public class SortedBag<E extends Comparable<? super E>> extends AbstractArrayCol
 
     @Override
     public boolean remove(Object o) {
-        // TODO implement unless collection shall be immutable
-        throw new UnsupportedOperationException();
+        int index = indexOf(o);
+        if(index >= data.length) throw new IllegalStateException("Array is full");
+        if (index < 0) return false;
+
+        data[index] = null;
+        if (index < size-1) shiftLeft(index);
+        size--;
+        return true;
     }
 
     @Override
