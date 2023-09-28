@@ -6,6 +6,7 @@ import java.util.Set;
 public class UnsortedSet<E> extends AbstractArrayCollection<E> implements Set<E> {
 	public static final int DEFAULT_CAPACITY = 100;
 	private E[] data;
+	private int size = 0;
 
 	public UnsortedSet() {
 		this(DEFAULT_CAPACITY);
@@ -16,10 +17,29 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements Set<E>
 		data = (E[])new Object[capacity];
 	}
 
+	private int indexOf(Object o) {
+		checkNull(o);
+		int index = 0;
+		while (data[index] != null && (!data[index].equals(o))) {
+			index++;
+		}
+
+		if (data[index] == null) {
+			return -1;
+		} else {
+			return index;
+		}
+
+	}
+
 	@Override
 	public boolean add(E e) {
-		// TODO implement unless collection shall be immutable
-		throw new UnsupportedOperationException();
+		if (size >= data.length) throw new IllegalStateException("Array is full");
+		if (contains(e)) return false;
+
+		data[size] = e;
+		size++;
+		return true;
 	}
 
 	@Override
@@ -30,8 +50,7 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements Set<E>
 
 	@Override
 	public boolean contains(Object o) {
-		// TODO must be implemented
-		throw new UnsupportedOperationException();
+		return indexOf(o) >= 0;
 	}
 
 	@Override
@@ -41,8 +60,7 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements Set<E>
 
 	@Override
 	public int size() {
-		// TODO must be implemented
-		return 0;
+		return size;
 	}
 
 	public static void main(String[] args) {
