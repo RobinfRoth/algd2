@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class SortedBag<E extends Comparable<? super E>> extends AbstractArrayCollection<E> {
     public static final int DEFAULT_CAPACITY = 100;
     private E[] data;
-    private int size;
+    private int size = 0;
 
     public SortedBag() {
         this(DEFAULT_CAPACITY);
@@ -69,6 +69,7 @@ public class SortedBag<E extends Comparable<? super E>> extends AbstractArrayCol
 
     public static void main(String[] args) {
         SortedBag<Integer> bag = new SortedBag<Integer>();
+        System.out.println(bag.size());
         bag.add(2);
         bag.add(1);
         System.out.println(Arrays.toString(bag.toArray()));
