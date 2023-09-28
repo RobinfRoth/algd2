@@ -43,8 +43,13 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements Set<E>
 
 	@Override
 	public boolean remove(Object o) {
-		// TODO implement unless collection shall be immutable
-		throw new UnsupportedOperationException();
+		int index = indexOf(o);
+		if (index < 0) return false;
+
+		data[index] = data[size - 1];
+		data[size - 1] = null;
+		size--;
+		return true;
 	}
 
 	@Override
