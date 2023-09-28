@@ -54,7 +54,7 @@ public class SortedBag<E extends Comparable<? super E>> extends AbstractArrayCol
 
     @Override
     public boolean contains(Object o) {
-        return indexOf(o) > 0;
+        return indexOf(o) >= 0;
     }
 
     @Override
