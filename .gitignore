@@ -23,11 +23,14 @@
 hs_err_pid*
 replay_pid*
 
-# gradle Folder
+# Gradle Folder
 .gradle/
 
 # IntellJ Folder
 .idea/
 
-# Eclips Settings
+# Eclipse Settings
 .settings/
+
+# Build Folder
+build/
