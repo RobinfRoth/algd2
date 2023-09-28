@@ -1,0 +1,44 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+
+task testSortedBag (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for the sorted bag implementation'
+	
+	include('ch/fhnw/algd2/arraycollections/SortedBagTest.class')
+}
+
+task testSortedSet (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for the sorted set implementation'
+	
+	include('ch/fhnw/algd2/arraycollections/SortedSetTest.class')
+}
+
+task testUnsortedBag (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for the unsorted bag implementation'
+	
+	include('ch/fhnw/algd2/arraycollections/UnsortedBagTest.class')
+}
+
+task testUnsortedSet (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for the unsorted set implementation'
+	
+	include('ch/fhnw/algd2/arraycollections/UnsortedSetTest.class')
+}
