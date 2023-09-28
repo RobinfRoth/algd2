@@ -20,11 +20,11 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements Set<E>
 	private int indexOf(Object o) {
 		checkNull(o);
 		int index = 0;
-		while (data[index] != null && (!data[index].equals(o))) {
+		while (index < data.length && data[index] != null && !data[index].equals(o)) {
 			index++;
 		}
 
-		if (data[index] == null) {
+		if (index == data.length || data[index] == null) {
 			return -1;
 		} else {
 			return index;
@@ -34,9 +34,8 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements Set<E>
 
 	@Override
 	public boolean add(E e) {
-		if (size >= data.length) throw new IllegalStateException("Array is full");
 		if (contains(e)) return false;
-
+		if (size >= data.length) throw new IllegalStateException("Array is full");
 		data[size] = e;
 		size++;
 		return true;
