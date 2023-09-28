@@ -33,7 +33,7 @@ public class SortedBag<E extends Comparable<? super E>> extends AbstractArrayCol
     public boolean add(E e) {
         int index = indexOf(e);
         if (index < 0) index = (-1 * index) - 1; // when not found: index = (-(insertionPoint) - 1)
-        if (index > data.length) throw new IllegalStateException("Array is full");
+        if (index >= data.length) throw new IllegalStateException("Array is full");
 
         if (index < size) {
              shiftRight(index);
