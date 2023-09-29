@@ -7,11 +7,21 @@ import ch.fhnw.algd2.collections.list.MyAbstractList;
 public class MyLinkedList<E> extends MyAbstractList<E> {
 	private int size = 0;
 	private Node<E> first;
+	private Node<E> last;
 
 	@Override
 	public boolean add(E e) {
-		// TODO implement this operation (part A)
-		throw new UnsupportedOperationException();
+
+		Node<E> newNode = new Node<>(e);
+
+		if (size == 0) {
+			first = newNode;
+		} else {
+			last.next = newNode;
+		}
+		last = newNode;
+		size++;
+		return true;
 	}
 
 	@Override
