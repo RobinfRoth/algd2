@@ -1,0 +1,65 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 14
+targetCompatibility = 14
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+
+task testTaskA (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for task A (add)'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/A_MyLinkedListTest_Add.class')
+}
+
+task testEfficiency (type: Test) {
+	group = 'verification'
+	description = 'Runs efficiency tests for task A'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/A_MyLinkedListTest_Add_Efficiency.class')
+}
+
+task testTaskB (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for task B (contains)'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/B_MyLinkedListTest_Contains.class')
+}
+
+task testTaskC (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for task C (remove)'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/C_MyLinkedListTest_Remove.class')
+}
+
+task testTaskD (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for task D'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/D_MyLinkedListTest_Complete.class')
+}
+
+task testTaskE (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for task E (null support)'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/E_MyLinkedListTest_SupportingNull.class')
+}
+
+task testStack (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for stack implementation'
+	
+	include('ch/fhnw/algd2/collections/list/stack/MyStackTest.class')
+}
