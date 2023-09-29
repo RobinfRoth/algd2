@@ -26,8 +26,15 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
 
 	@Override
 	public boolean contains(Object o) {
-		// TODO implement this operation (part B)
-		throw new UnsupportedOperationException();
+		// TODO: implement contains using while
+		Node<E> currentNode = first;
+		for (int i=0; i<size; i++) {
+			if (currentNode.elem.equals(o)) {
+				return true;
+			}
+			currentNode = currentNode.next;
+		}
+		return false;
 	}
 
 	@Override
@@ -90,6 +97,7 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
 		list.add(1);
 		list.add(2);
 		list.add(3);
+		System.out.println(list.contains(2));
 		System.out.println(Arrays.toString(list.toArray()));
 	}
 }
