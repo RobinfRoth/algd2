@@ -1,10 +1,15 @@
 package ch.fhnw.algd2.collections.list.stack;
 
+import ch.fhnw.algd2.collections.list.linkedlist.MyLinkedList;
+import java.util.EmptyStackException;
+
 public class MyStack<E> implements IStack<E> {
+	private MyLinkedList<E> list = new MyLinkedList<E>();
+
 	@Override
 	public E pop() {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+		if (list.size() == 0) throw new EmptyStackException();
+		return list.remove(0);
 	}
 
 	@Override
