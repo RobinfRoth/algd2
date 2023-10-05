@@ -14,8 +14,8 @@ public class MyStack<E> implements IStack<E> {
 
 	@Override
 	public E push(E elem) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+		list.add(0, elem);
+		return elem;
 	}
 
 	@Override
