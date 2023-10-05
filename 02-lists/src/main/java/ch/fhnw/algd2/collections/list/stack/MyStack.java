@@ -26,8 +26,7 @@ public class MyStack<E> implements IStack<E> {
 
 	@Override
 	public boolean empty() {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+		return list.size() == 0;
 	}
 
 	public static void main(String[] args) {
