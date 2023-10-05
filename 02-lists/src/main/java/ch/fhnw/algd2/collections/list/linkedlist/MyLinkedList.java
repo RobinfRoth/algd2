@@ -130,8 +130,27 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
 
     @Override
     public E remove(int index) {
-        // TODO implement this operation (part D)
-        throw new UnsupportedOperationException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + size + ".");
+        }
+        // first element
+        if (index == 0) {
+            E removedElement = first.elem;
+            first = first.next;
+            size--;
+            return removedElement;
+        }
+
+        Node<E> currentNode = first;
+        Node<E> previousNode = null;
+        for (int i = 0; i < index; i++) {
+            previousNode = currentNode;
+            currentNode = currentNode.next;
+        }
+        previousNode.next = currentNode.next;
+        if (index == size - 1) last = previousNode;
+        size--;
+        return currentNode.elem;
     }
 
     @Override
@@ -173,6 +192,8 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
         System.out.println(list.contains(2));
         System.out.println(list.remove(new Integer(2)));
         System.out.println(Arrays.toString(list.toArray()));
-        System.out.println(list.get(2));
+        System.out.println(list.get(1));
+        System.out.println(list.remove(1));
+        System.out.println(Arrays.toString(list.toArray()));
     }
 }
