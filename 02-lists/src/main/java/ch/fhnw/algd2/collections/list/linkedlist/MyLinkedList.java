@@ -39,8 +39,43 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
 
 	@Override
 	public boolean remove(Object o) {
-		// TODO implement this operation (part C)
-		throw new UnsupportedOperationException();
+		Node<E> current = first;
+		Node<E> prev = first;
+		while(current != null && !current.elem.equals(o)) {
+			prev = current;
+			current = current.next;
+		}
+
+		// o not contained
+		if (current == null) return false;
+
+		// o is first
+		if (first == current) {
+			first = current.next;
+
+			// o is the only element of the list
+			if (size == 1) {
+				first = null;
+				last = null;
+				current.next = null;
+			}
+			size--;
+			return true;
+		}
+
+		// o is last
+		if (last == current) {
+			prev.next = null;
+			last = prev;
+			size--;
+			return true;
+		}
+
+		// o is an element in the middle
+		prev.next = current.next;
+		current.next = null;
+		size--;
+		return true;
 	}
 
 	@Override
@@ -98,6 +133,7 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
 		list.add(2);
 		list.add(3);
 		System.out.println(list.contains(2));
+		System.out.println(list.remove(new Integer(2)));
 		System.out.println(Arrays.toString(list.toArray()));
 	}
 }
