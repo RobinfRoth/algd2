@@ -95,8 +95,37 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
 
     @Override
     public void add(int index, E element) {
-        // TODO implement this operation (part D)
-        throw new UnsupportedOperationException();
+        if (element == null) throw new NullPointerException("This list does not permit null values.");
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + size + ".");
+        }
+        // first element
+        Node<E> currentNode = first;
+        if (index == 0) {
+            first = new Node<>(element, currentNode);
+            if (size == 0) last = first;
+            size++;
+            return;
+        }
+
+        // last element
+        if (index == size) {
+            Node<E> newNode = new Node<>(element, null);
+            last.next = newNode;
+            last = newNode;
+            size++;
+            return;
+        }
+
+
+        // middle element
+        Node<E> previousNode = null;
+        for (int i = 0; i < index; i++) {
+            previousNode = currentNode;
+            currentNode = currentNode.next;
+        }
+        previousNode.next = new Node<>(element, currentNode);
+        size++;
     }
 
     @Override
