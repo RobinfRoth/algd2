@@ -8,7 +8,7 @@ public class MyStack<E> implements IStack<E> {
 
 	@Override
 	public E pop() {
-		if (list.size() == 0) throw new EmptyStackException();
+		if (empty()) throw new EmptyStackException();
 		return list.remove(0);
 	}
 
