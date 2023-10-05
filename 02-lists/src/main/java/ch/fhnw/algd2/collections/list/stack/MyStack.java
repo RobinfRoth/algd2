@@ -20,8 +20,8 @@ public class MyStack<E> implements IStack<E> {
 
 	@Override
 	public E peek() {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+		if (empty()) throw new EmptyStackException();
+		return list.get(0);
 	}
 
 	@Override
