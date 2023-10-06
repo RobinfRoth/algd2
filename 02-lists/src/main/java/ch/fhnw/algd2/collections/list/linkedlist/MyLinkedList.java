@@ -1,6 +1,7 @@
 package ch.fhnw.algd2.collections.list.linkedlist;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import ch.fhnw.algd2.collections.list.MyAbstractList;
 
@@ -29,7 +30,7 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
         // TODO: implement contains using while
         Node<E> currentNode = first;
         for (int i=0; i<size; i++) {
-            if (currentNode.elem.equals(o)) {
+            if (Objects.equals(o, currentNode.elem)) {
                 return true;
             }
             currentNode = currentNode.next;
@@ -41,7 +42,7 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
     public boolean remove(Object o) {
         Node<E> current = first;
         Node<E> prev = first;
-        while(current != null && !current.elem.equals(o)) {
+        while(current != null && !Objects.equals(o, current.elem)) {
             prev = current;
             current = current.next;
         }
@@ -95,7 +96,6 @@ public class MyLinkedList<E> extends MyAbstractList<E> {
 
     @Override
     public void add(int index, E element) {
-        if (element == null) throw new NullPointerException("This list does not permit null values.");
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + size + ".");
         }
