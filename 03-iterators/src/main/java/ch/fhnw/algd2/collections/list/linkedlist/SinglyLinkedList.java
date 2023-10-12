@@ -227,11 +227,14 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
 			if (iterModCount != modCount) throw new ConcurrentModificationException();
 			if (!mayRemove) throw new IllegalStateException();
 			prev.next = null;
-			// only one element
+			// remove first
 			if (prev == first) first = next;
-			// prev is last, next is null
-			else if (prev == last) last = oldPrev;
-			// more than two elements
+			// remove last, next is null
+			else if (prev == last) {
+				last = oldPrev;
+				oldPrev.next = null;
+			}
+			// remove element in the middle
 			else if (oldPrev != null) oldPrev.next = next;
 			prev = oldPrev;
 			size--;
@@ -250,7 +253,9 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
 		Iterator<Integer> it = list.iterator();
 		it.next();
 		it.next();
-		it.remove();
+		it.next();
+		it.next();
+		System.out.println(it.hasNext());
 
 		System.out.println(Arrays.toString(list.toArray()));
 	}
