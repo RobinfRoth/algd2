@@ -3,6 +3,7 @@ package ch.fhnw.algd2.collections.list.linkedlist;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Objects;
 
 import ch.fhnw.algd2.collections.list.MyAbstractList;
 
@@ -33,12 +34,92 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 	@Override
 	public void add(int index, E element) {
-		throw new UnsupportedOperationException();
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + size + ".");
+		}
+		// first element
+		if (index == 0) {
+			if (size == 0) {
+				first.next = new Node<>(first, element, first);
+				first.prev = first.next;
+				last = first.next;
+			} else {
+				first.next = new Node<>(first, element, first.next);
+			}
+			size++;
+			modCount++;
+			return;
+		}
+
+		// last element
+		if (index == size) {
+			Node<E> newNode = new Node<>(last, element, first);
+			last.next = newNode;
+			first.prev = last.next;
+			last = newNode;
+			size++;
+			modCount++;
+			return;
+		}
+
+		// middle element
+		Node<E> currentNode = first.next;
+		for (int i = 0; i < index; i++) {
+			currentNode = currentNode.next;
+		}
+		Node<E> newNode = new Node<>(currentNode.prev, element, currentNode);
+		currentNode.prev.next = newNode;
+		currentNode.prev = newNode;
+		size++;
+		modCount++;
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		throw new UnsupportedOperationException();
+		Node<E> current = first.next;
+		while(current != null && current != first && !Objects.equals(o, current.elem)) {
+			current = current.next;
+		}
+
+		// o not contained
+		if (current == null || current.elem == null) return false;
+
+		// o is first
+		if (first.next == current) {
+			first.next = current.next;
+			current.prev = null;
+			current.next = null;
+
+			// o is the only element of the list
+			if (size == 1) {
+				first.prev = first;
+				last = first;
+			}
+			size--;
+			modCount++;
+			return true;
+		}
+
+		// o is last
+		if (last == current) {
+			current.prev.next = first;
+			first.prev = current.prev;
+			last = current.prev;
+			current.next = null;
+			current.prev = null;
+			size--;
+			modCount++;
+			return true;
+		}
+
+		// o is an element in the middle
+		current.prev.next = current.next;
+		current.next.prev = current.prev;
+		current.next = null;
+		current.prev = null;
+		size--;
+		modCount++;
+		return true;
 	}
 
 	@Override
@@ -48,12 +129,29 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 	@Override
 	public boolean contains(Object o) {
-		throw new UnsupportedOperationException();
+		Node<E> currentNode = first.next;
+		for (int i=0; i<size; i++) {
+			if (Objects.equals(o, currentNode.elem)) {
+				return true;
+			}
+			currentNode = currentNode.next;
+		}
+		return false;
 	}
 
 	@Override
 	public E get(int index) {
-		throw new UnsupportedOperationException();
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + size + ".");
+		}
+
+		Node<E> currentNode = first.next;
+		int currentIndex = 0;
+		while (currentIndex < index) {
+			currentIndex++;
+			currentNode = currentNode.next;
+		}
+		return currentNode.elem;
 	}
 
 	@Override
@@ -133,9 +231,12 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 	public static void main(String[] args) {
 		DoublyLinkedList<Integer> list = new DoublyLinkedList<Integer>();
-		list.add(1);
-		list.add(2);
-		list.add(3);
+		list.add(0, 1);
+		list.add(1, 2);
+		list.add(1,3);
+		list.add(1,4);
+		list.add(1,5);
+		// System.out.println(list.remove(Integer.valueOf(3)));
 		System.out.println(Arrays.toString(list.toArray()));
 	}
 }
