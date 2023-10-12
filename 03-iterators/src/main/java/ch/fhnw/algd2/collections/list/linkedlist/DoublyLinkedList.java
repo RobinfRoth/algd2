@@ -9,11 +9,26 @@ import ch.fhnw.algd2.collections.list.MyAbstractList;
 public class DoublyLinkedList<E> extends MyAbstractList<E> {
 	// variable int modCount already declared by AbstractList<E>
 	private int size = 0;
-	private Node<E> first, last;
+	private Node<E> first = new Node<>(null), last;
 
 	@Override
 	public boolean add(E e) {
-		throw new UnsupportedOperationException();
+		Node<E> newNode = new Node<>(e);
+		if (size == 0) {
+			first.prev = newNode;
+			first.next = newNode;
+			newNode.prev = first;
+			newNode.next = first;
+		} else {
+			first.prev = newNode;
+			last.next = newNode;
+			newNode.prev = last;
+			newNode.next = first;
+		}
+		last = newNode;
+		size++;
+		modCount++;
+		return true;
 	}
 
 	@Override
@@ -43,8 +58,8 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 	@Override
 	public Object[] toArray() {
-		return arrayForDoublyLinkedList();
-		// return arrayForCyclicDoublyLinkedList();
+		// return arrayForDoublyLinkedList();
+		return arrayForCyclicDoublyLinkedList();
 	}
 
 	private Object[] arrayForDoublyLinkedList() {
