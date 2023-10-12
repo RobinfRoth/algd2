@@ -1,0 +1,64 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    jcenter()
+}
+
+sourceSets {
+	main { java {}}
+	test { java {
+		srcDirs 'src/testbase/java'
+		srcDirs 'src/test1sll/java'
+		srcDirs 'src/test2dll/java'
+	}	}
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+
+task testSinglyLinkedList (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for implementation of singly linked list'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/SLL_A_Test_Add.class')
+	include('ch/fhnw/algd2/collections/list/linkedlist/SLL_B_Test_Contains.class')
+	include('ch/fhnw/algd2/collections/list/linkedlist/SLL_C_Test_Remove.class')
+	include('ch/fhnw/algd2/collections/list/linkedlist/SLL_D_Test_Complete.class')
+}
+
+task testSinglyLinkedListIterator (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for implementation of iterator on singly linked list'
+	
+	include('ch/fhnw/algd2/collections/list/iterator/A_SLL_Iterator_SimpleIteration.class')
+	include('ch/fhnw/algd2/collections/list/iterator/B_SLL_Iterator_ConcurrentModification.class')
+	include('ch/fhnw/algd2/collections/list/iterator/C_SLL_Iterator_RemoveElement.class')
+}
+
+task testDoublyLinkedList (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for implementation of doubly linked list'
+	
+	include('ch/fhnw/algd2/collections/list/linkedlist/DLL_A_Test_Add.class')
+	include('ch/fhnw/algd2/collections/list/linkedlist/DLL_B_Test_Contains.class')
+	include('ch/fhnw/algd2/collections/list/linkedlist/DLL_C_Test_Remove.class')
+	include('ch/fhnw/algd2/collections/list/linkedlist/DLL_D_Test_Complete.class')
+}
+
+task testDoublyLinkedListIterator (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for implementation of iterator on doubly linked list'
+	
+	include('ch/fhnw/algd2/collections/list/iterator/A_DLL_Iterator_SimpleIteration.class')
+	include('ch/fhnw/algd2/collections/list/iterator/B_DLL_Iterator_ConcurrentModification.class')
+	include('ch/fhnw/algd2/collections/list/iterator/C_DLL_Iterator_RemoveElement.class')
+	include('ch/fhnw/algd2/collections/list/iterator/D_DLL_ListIteratorTest.class')
+}
