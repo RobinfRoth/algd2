@@ -1,9 +1,6 @@
 package ch.fhnw.algd2.collections.list.linkedlist;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Objects;
+import java.util.*;
 
 import ch.fhnw.algd2.collections.list.MyAbstractList;
 
@@ -124,7 +121,35 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 	@Override
 	public E remove(int index) {
-		throw new UnsupportedOperationException();
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + size + ".");
+		}
+		// first element
+		if (index == 0) {
+			Node<E> removedNode = first.next;
+			if (size == 1) {
+				first.next = first;
+				first.prev = first;
+			}
+			else {
+				first.next = removedNode.next;
+				removedNode.next.prev = first;
+			}
+			size--;
+			modCount++;
+			return removedNode.elem;
+		}
+
+		Node<E> currentNode = first.next;
+		for (int i = 0; i < index; i++) {
+			currentNode = currentNode.next;
+		}
+		currentNode.prev.next = currentNode.next;
+		currentNode.next.prev = currentNode.prev;
+		if (index == size - 1) last = currentNode.prev;
+		size--;
+		modCount++;
+		return currentNode.elem;
 	}
 
 	@Override
@@ -213,19 +238,48 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 	}
 
 	private class MyListIterator implements Iterator<E> {
+
+		Node<E> next = first;
+		int iterModCount = modCount;
+		boolean mayRemove = false;
+
 		@Override
 		public boolean hasNext() {
-			throw new UnsupportedOperationException();
+			return next.next != first && next.next != null;
 		}
 
 		@Override
 		public E next() {
-			throw new UnsupportedOperationException();
+			next = next.next;
+			if (next == null || next == first) throw new NoSuchElementException();
+			if(iterModCount != modCount) throw new ConcurrentModificationException();
+			E element = next.elem;
+			mayRemove = true;
+			return element;
 		}
 
 		@Override
 		public void remove() {
-			throw new UnsupportedOperationException();
+			if (iterModCount != modCount) throw new ConcurrentModificationException();
+			if (!mayRemove) throw new IllegalStateException();
+			next.prev.next = null;
+			// remove first
+			if (next.prev == first.next) {
+				next.prev = first;
+				first.next = next;
+			}
+			// remove last, next is first
+			else if (next.prev == last) {
+				last = next.prev.prev;
+				last.next = first;
+				first.prev = last;
+			}
+			// remove element in the middle
+			else next.prev.prev = next;
+			size--;
+			modCount++;
+			iterModCount++;
+			mayRemove = false;
 		}
 	}
 
