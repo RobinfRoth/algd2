@@ -239,21 +239,21 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 	private class MyListIterator implements Iterator<E> {
 
-		Node<E> next = first;
+		Node<E> next = first.next;
 		int iterModCount = modCount;
 		boolean mayRemove = false;
 
 		@Override
 		public boolean hasNext() {
-			return next.next != first && next.next != null;
+			return next != first && next != null;
 		}
 
 		@Override
 		public E next() {
-			next = next.next;
 			if (next == null || next == first) throw new NoSuchElementException();
 			if(iterModCount != modCount) throw new ConcurrentModificationException();
 			E element = next.elem;
+			next = next.next;
 			mayRemove = true;
 			return element;
 		}
@@ -269,13 +269,18 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 				first.next = next;
 			}
 			// remove last, next is first
-			else if (next.prev == last) {
+			else if (next == first) {
 				last = next.prev.prev;
 				last.next = first;
 				first.prev = last;
+				next.prev.next = null;
+				next.prev.prev = null;
 			}
 			// remove element in the middle
-			else next.prev.prev = next;
+			else {
+				next.prev.prev.next = next;
+				next.prev = next.prev.prev;
+			}
 			size--;
 			modCount++;
 			iterModCount++;
