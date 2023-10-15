@@ -41,7 +41,9 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 				first.prev = first.next;
 				last = first.next;
 			} else {
-				first.next = new Node<>(first, element, first.next);
+				Node<E> newNode = new Node<>(first, element, first.next);
+				first.next.prev = newNode;
+				first.next = newNode;
 			}
 			size++;
 			modCount++;
@@ -84,6 +86,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 		// o is first
 		if (first.next == current) {
 			first.next = current.next;
+			current.next.prev = first;
 			current.prev = null;
 			current.next = null;
 
@@ -219,7 +222,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 	@Override
 	public ListIterator<E> listIterator() {
-		throw new UnsupportedOperationException("Implement later");
+		return new MyListIterator();
 	}
 
 	private static class Node<E> {
@@ -237,9 +240,9 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 		}
 	}
 
-	private class MyListIterator implements Iterator<E> {
+	private class MyListIterator implements ListIterator<E> {
 
-		Node<E> next = first.next;
+		Node<E> next = first.next, returnedNode;
 		int iterModCount = modCount;
 		boolean mayRemove = false;
 
@@ -252,36 +255,110 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 		public E next() {
 			if (next == null || next == first) throw new NoSuchElementException();
 			if(iterModCount != modCount) throw new ConcurrentModificationException();
-			E element = next.elem;
+			returnedNode = next;
 			next = next.next;
 			mayRemove = true;
-			return element;
+			return returnedNode.elem;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return next.prev != first && next.prev != null;
+		}
+
+		@Override
+		public E previous() {
+			if (next.prev == null || next.prev == first) throw new NoSuchElementException();
+			if(iterModCount != modCount) throw new ConcurrentModificationException();
+			returnedNode = next.prev;
+			next = next.prev;
+			mayRemove = true;
+			return returnedNode.elem;
+		}
+
+		@Override
+		public int nextIndex() {
+			Node<E> currentNode = first.next;
+			int index = 0;
+			if (currentNode == null) return 0;
+
+			while (currentNode != next) {
+				currentNode = currentNode.next;
+				index++;
+			}
+			return index;
+		}
+
+		@Override
+		public int previousIndex() {
+			Node<E> currentNode = first.next;
+			int index = 0;
+			if (currentNode == null) return 0;
+
+			while (currentNode != next.prev) {
+				currentNode = currentNode.next;
+				index++;
+			}
+			return index;
 		}
 
 		@Override
 		public void remove() {
 			if (iterModCount != modCount) throw new ConcurrentModificationException();
 			if (!mayRemove) throw new IllegalStateException();
-			next.prev.next = null;
 			// remove first
-			if (next.prev == first.next) {
-				next.prev = first;
-				first.next = next;
+			if (returnedNode == first.next) {
+				returnedNode.next.prev = first;
+				first.next = returnedNode.next;
 			}
 			// remove last, next is first
-			else if (next == first) {
-				last = next.prev.prev;
+			else if (returnedNode.next == first) {
+				last = returnedNode.prev;
 				last.next = first;
 				first.prev = last;
-				next.prev.next = null;
-				next.prev.prev = null;
 			}
 			// remove element in the middle
 			else {
-				next.prev.prev.next = next;
-				next.prev = next.prev.prev;
+				returnedNode.prev.next = returnedNode.next;
+				returnedNode.next.prev = returnedNode.prev;
 			}
+			if (next == returnedNode) next = returnedNode.next;
+			returnedNode = null;
 			size--;
+			modCount++;
+			iterModCount++;
+			mayRemove = false;
+		}
+
+		@Override
+		public void set(E e) {
+
+		}
+
+		@Override
+		public void add(E e) {
+			// add at the start
+			if (next == first.next) {
+				Node<E> newNode = new Node<>(first, e, next);
+				first.next.prev = newNode;
+				first.next = newNode;
+			}
+
+			// add at the end
+			else if (next == first) {
+				Node<E> newNode = new Node<>(last, e, first);
+				last.next = newNode;
+				first.prev = newNode;
+				last = newNode;
+			}
+			// middle
+			else {
+				Node<E> newNode = new Node<>(next.prev, e, next);
+				next.prev.next = newNode;
+				next.prev = newNode;
+			}
+
+			size++;
 			modCount++;
 			iterModCount++;
 			mayRemove = false;
