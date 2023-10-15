@@ -244,7 +244,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 		Node<E> next = first.next, returnedNode;
 		int iterModCount = modCount;
-		boolean mayRemove = false;
+		boolean mayChange = false;
 
 		@Override
 		public boolean hasNext() {
@@ -257,7 +257,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			if(iterModCount != modCount) throw new ConcurrentModificationException();
 			returnedNode = next;
 			next = next.next;
-			mayRemove = true;
+			mayChange = true;
 			return returnedNode.elem;
 		}
 
@@ -272,7 +272,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			if(iterModCount != modCount) throw new ConcurrentModificationException();
 			returnedNode = next.prev;
 			next = next.prev;
-			mayRemove = true;
+			mayChange = true;
 			return returnedNode.elem;
 		}
 
@@ -305,7 +305,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 		@Override
 		public void remove() {
 			if (iterModCount != modCount) throw new ConcurrentModificationException();
-			if (!mayRemove) throw new IllegalStateException();
+			if (!mayChange) throw new IllegalStateException();
 			// remove first
 			if (returnedNode == first.next) {
 				returnedNode.next.prev = first;
@@ -327,7 +327,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			size--;
 			modCount++;
 			iterModCount++;
-			mayRemove = false;
+			mayChange = false;
 		}
 
 		@Override
@@ -361,7 +361,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			size++;
 			modCount++;
 			iterModCount++;
-			mayRemove = false;
+			mayChange = false;
 		}
 	}
 
