@@ -244,7 +244,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 
 		Node<E> next = first.next, returnedNode;
 		int iterModCount = modCount;
-		boolean mayChange = false;
+		boolean mayChange = false, hasChanged = false;
 
 		@Override
 		public boolean hasNext() {
@@ -258,6 +258,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			returnedNode = next;
 			next = next.next;
 			mayChange = true;
+			hasChanged = false;
 			return returnedNode.elem;
 		}
 
@@ -273,6 +274,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			returnedNode = next.prev;
 			next = next.prev;
 			mayChange = true;
+			hasChanged = false;
 			return returnedNode.elem;
 		}
 
@@ -328,11 +330,13 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			modCount++;
 			iterModCount++;
 			mayChange = false;
+			hasChanged = true;
 		}
 
 		@Override
 		public void set(E e) {
-
+			if (!mayChange || hasChanged) throw new IllegalStateException();
+			returnedNode.elem = e;
 		}
 
 		@Override
@@ -362,6 +366,7 @@ public class DoublyLinkedList<E> extends MyAbstractList<E> {
 			modCount++;
 			iterModCount++;
 			mayChange = false;
+			hasChanged = true;
 		}
 	}
 
