@@ -1,0 +1,27 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+sourceCompatibility = 14
+targetCompatibility = 21
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+
+mainClassName = 'TreeEditor'
+run { args 'BinarySearchTree' }
+
+task testRemove (type: Test) {
+	group = 'verification'
+	description = 'Runs tests for the remove task'
+	
+	include('Test_Remove.class')
+}
