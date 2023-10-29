@@ -50,7 +50,42 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	 */
 	@Override
 	public void insert(K key, E element) {
-		// TODO implement method insert here
+		if (isEmpty()) {
+			root = new Node<K, E>(key, element);
+			nodeCount++;
+			return;
+		}
+		insert(root, key, element);
+	}
+
+	/**
+	 * Helper method for recursion that takes in tee root of a (sub)tree.
+	 *
+	 * @param currentRoot Node where the subtree starts.
+	 * @param key Key of the element to be inserted.
+	 * @param element Element to be inserted.
+	 */
+	private void insert(Node<K, E> currentRoot, K key, E element) {
+		if (key.equals(currentRoot.getKey())) {
+			currentRoot.element = element;
+			return;
+		}
+
+		if (key.compareTo(currentRoot.getKey()) > 0) {
+			if (currentRoot.right == null) {
+				currentRoot.right = new Node<>(key, element);
+				nodeCount++;
+				return;
+			}
+			insert(currentRoot.right, key, element);
+		} else {
+			if (currentRoot.left == null) {
+				currentRoot.left = new Node<K, E>(key, element);
+				nodeCount++;
+				return;
+			}
+			insert(currentRoot.left, key, element);
+		}
 	}
 
 	/**
@@ -62,8 +97,21 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	 */
 	@Override
 	public E search(K key) {
-		// TODO implement method search here
-		return null;
+		return search(root, key);
+	}
+
+	private E search(Node<K, E> currentRoot, K key) {
+		if(currentRoot == null) return null;
+
+		if (currentRoot.key.equals(key)) {
+			return currentRoot.element;
+		}
+
+		if (key.compareTo(currentRoot.getKey()) > 0) {
+			return search(currentRoot.right, key);
+		} else {
+			return search(currentRoot.left, key);
+		}
 	}
 
 	/**
