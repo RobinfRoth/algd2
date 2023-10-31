@@ -123,7 +123,48 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	 */
 	@Override
 	public void remove(K key) {
-		// TODO implement method remove here
+		root = remove(root, key);
+	}
+
+	private Node<K, E> remove(Node<K, E> currentRoot, K key) {
+		if (currentRoot == null) return null;
+
+		if (key.equals(currentRoot.key)) {
+			if (currentRoot.left == null && currentRoot.right == null) {
+				currentRoot = null;
+				nodeCount--;
+			} else if (currentRoot.left != null && currentRoot.right != null) {
+				Node<K, E> symSuccessor = getSymSuccessor(currentRoot);
+				remove(currentRoot, symSuccessor.key);
+				symSuccessor.left = currentRoot.left;
+				symSuccessor.right = currentRoot.right;
+				currentRoot = symSuccessor;
+			} else if (currentRoot.left != null) {
+				currentRoot = currentRoot.left;
+				nodeCount--;
+			} else {
+				currentRoot = currentRoot.right;
+				nodeCount--;
+			}
+			return currentRoot;
+		}
+
+		if (key.compareTo(currentRoot.key) > 0) {
+			currentRoot.right = remove(currentRoot.right, key);
+			return currentRoot;
+		} else {
+			currentRoot.left = remove(currentRoot.left, key);
+			return currentRoot;
+		}
+	}
+
+	private Node<K,E> getSymSuccessor(Node<K,E> currentRoot) {
+		Node <K, E> successor = currentRoot.right;
+
+		while (successor.left != null) {
+			successor = successor.left;
+		}
+		return successor;
 	}
 
 	/*
@@ -139,8 +180,19 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 
 	@Override
 	public String toString() {
-		// TODO implement method toString here
-		return "TO BE IMPLEMENTED";
+		return inorder(root);
+	}
+
+	private String inorder(Node<K, E> currentRoot) {
+		String inorderString = "";
+
+		if (currentRoot == null) return "";
+		if (currentRoot.left == null && currentRoot.right == null) return "[ " + currentRoot.key.toString() + " ]";
+
+		inorderString += "[" + inorder(currentRoot.left);
+		inorderString += " " + currentRoot.key.toString() + " ";
+		inorderString += inorder(currentRoot.right) + "]";
+		return inorderString;
 	}
 
 	private static class Node<K extends Comparable<? super K>, E> implements Tree.Node<K, E> {
