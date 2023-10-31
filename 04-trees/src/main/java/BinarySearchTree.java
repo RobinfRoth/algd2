@@ -174,8 +174,16 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	 */
 	@Override
 	public int height() {
-		// TODO implement method height here
-		return 0;
+		return height(root);
+	}
+
+	private int height(Node<K, E> currentRoot) {
+		int height = 0;
+		if (currentRoot == null) return 0;
+		if (currentRoot.left == null && currentRoot.right == null) return 1;
+		height += Math.max(height(currentRoot.left), height(currentRoot.right)) + 1;
+
+		return height;
 	}
 
 	@Override
