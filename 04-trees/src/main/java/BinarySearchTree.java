@@ -188,19 +188,19 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 
 	@Override
 	public String toString() {
-		return inorder(root);
+		var sb = new StringBuilder();
+		inorder(root, sb);
+		return sb.toString();
 	}
 
-	private String inorder(Node<K, E> currentRoot) {
-		String inorderString = "";
+	private void inorder(Node<K, E> currentRoot, StringBuilder sb) {
+		if (currentRoot == null) return;
 
-		if (currentRoot == null) return "";
-		if (currentRoot.left == null && currentRoot.right == null) return "[ " + currentRoot.key.toString() + " ]";
-
-		inorderString += "[" + inorder(currentRoot.left);
-		inorderString += " " + currentRoot.key.toString() + " ";
-		inorderString += inorder(currentRoot.right) + "]";
-		return inorderString;
+		sb.append("[");
+		inorder(currentRoot.left, sb);
+		sb.append(" ").append(currentRoot.key.toString()).append(" ");
+		inorder(currentRoot.right, sb);
+		sb.append("]");
 	}
 
 	private static class Node<K extends Comparable<? super K>, E> implements Tree.Node<K, E> {
