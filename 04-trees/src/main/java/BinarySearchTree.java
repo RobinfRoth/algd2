@@ -55,7 +55,7 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 			nodeCount++;
 			return;
 		}
-		insert(root, key, element);
+		root = insert(root, key, element);
 	}
 
 	/**
@@ -65,27 +65,79 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	 * @param key Key of the element to be inserted.
 	 * @param element Element to be inserted.
 	 */
-	private void insert(Node<K, E> currentRoot, K key, E element) {
+	private Node<K, E> insert(Node<K, E> currentRoot, K key, E element) {
 		if (key.equals(currentRoot.getKey())) {
 			currentRoot.element = element;
-			return;
+			return currentRoot;
 		}
 
 		if (key.compareTo(currentRoot.getKey()) > 0) {
 			if (currentRoot.right == null) {
 				currentRoot.right = new Node<>(key, element);
 				nodeCount++;
-				return;
+				return currentRoot;
 			}
-			insert(currentRoot.right, key, element);
+			currentRoot.right = insert(currentRoot.right, key, element);
+			currentRoot = balance(currentRoot);
 		} else {
 			if (currentRoot.left == null) {
 				currentRoot.left = new Node<K, E>(key, element);
 				nodeCount++;
-				return;
+				return currentRoot;
 			}
-			insert(currentRoot.left, key, element);
+			currentRoot.left = insert(currentRoot.left, key, element);
+			currentRoot = balance(currentRoot);
 		}
+		return currentRoot;
+	}
+
+	private Node<K, E> balance(Node<K, E> currentRoot) {
+		if (currentRoot == null) return null;
+
+		int balParent = height(currentRoot.right) - height(currentRoot.left);
+		if (balParent < -1 ) {
+			int balChild = height(currentRoot.left.right) - height(currentRoot.left.left);
+			if (balChild > 0) {
+				return rotateLR(currentRoot);
+			} else {
+				return rotateR(currentRoot);
+			}
+		} else if (balParent > 1) {
+			int balChild = height(currentRoot.right.right) - height(currentRoot.right.left);
+			if (balChild < 0) {
+				return rotateRL(currentRoot);
+			} else {
+				return rotateL(currentRoot);
+			}
+		}
+		return currentRoot;
+	}
+
+	private Node<K, E> rotateR(Node<K, E> currentRoot) {
+		var n1 = currentRoot.left;
+		currentRoot.left = n1.right;
+		n1.right = currentRoot;
+		currentRoot = n1;
+		return currentRoot;
+	}
+
+	private Node<K, E> rotateL(Node<K, E> currentRoot) {
+		var n1 = currentRoot.right;
+		currentRoot.right = n1.left;
+		n1.left = currentRoot;
+		currentRoot = n1;
+		return currentRoot;
+	}
+
+	private Node<K, E> rotateLR(Node<K, E> currentRoot) {
+		currentRoot.left = rotateL(currentRoot.left);
+		currentRoot = rotateR(currentRoot);
+		return currentRoot;
+	}
+
+	private Node<K, E> rotateRL(Node<K, E> currentRoot) {
+		currentRoot.right = rotateR(currentRoot.right);
+		return rotateL(currentRoot);
 	}
 
 	/**
@@ -151,11 +203,10 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 
 		if (key.compareTo(currentRoot.key) > 0) {
 			currentRoot.right = remove(currentRoot.right, key);
-			return currentRoot;
 		} else {
 			currentRoot.left = remove(currentRoot.left, key);
-			return currentRoot;
 		}
+		return currentRoot;
 	}
 
 	private Node<K,E> getSymSuccessor(Node<K,E> currentRoot) {
