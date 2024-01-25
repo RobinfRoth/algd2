@@ -150,6 +150,39 @@ class Heap<K> implements PriorityQueue<K> {
 	}
 
 	/**
+	 * Decreases the priority of the node on a given index.
+	 * @param index	index of the element to change.
+	 * @param negChange Value the priority of the element should be decreased by.
+	 */
+	public void decreasePriority(int index, long negChange) {
+		if (index < 0 || index > size) throw new IndexOutOfBoundsException();
+		long newPrio = heap[index].priority - negChange;
+		heap[index] = new HeapNode<>(heap[index].element, newPrio);
+		if (negChange >= 0) {
+			siftUp(index);
+		} else {
+			siftDown(index);
+		}
+	}
+
+	/**
+	 * Remove the element at a given index.
+	 * @param index index of the element to delete.
+	 */
+	public void delete(int index) {
+		if (index == 0) {
+			try {
+				removeMin();
+			} catch (QueueEmptyException qee) {
+				qee.printStackTrace();
+			}
+		} else if (heap[2*index+1] != null && heap[2*index + 2] != null) {
+			
+		}
+	}
+
+
+	/**
 	 * Allocates a long[] Array and copies the priority values from the heap
 	 * array. The length of the returned array shall be equal to the number of
 	 * elements in the heap (i.e. size()). The smallest element (root) shall be
