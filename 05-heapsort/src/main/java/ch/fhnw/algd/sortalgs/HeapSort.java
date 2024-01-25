@@ -13,13 +13,10 @@ public class HeapSort implements SortAlg {
 			siftDown(data, i, data.size());
 		}
 
-		int size = data.size();
-		for (int end = data.size() - 1; end >= 0; end--) {
+		for (int end = data.size() - 1; end > 0; end--) {
 			data.swap(0, end);
-			siftDown(data, 0, size-1);
-			size--;
+			siftDown(data, 0, end);
 		}
-
 	}
 
 	private void siftDown(SortData data, int start, int size) {
