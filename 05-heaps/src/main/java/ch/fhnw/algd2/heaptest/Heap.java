@@ -12,7 +12,7 @@ class Heap<K> implements PriorityQueue<K> {
 	/**
 	 * Construct the binary heap.
 	 * 
-	 * @param size
+	 * @param capacity
 	 *          how many items the heap can store
 	 */
 	@SuppressWarnings("unchecked")
@@ -39,7 +39,7 @@ class Heap<K> implements PriorityQueue<K> {
 	 */
 	@Override
 	public boolean isEmpty() {
-		return size() == 0;
+		return size == 0;
 	}
 
 	/**
@@ -49,8 +49,7 @@ class Heap<K> implements PriorityQueue<K> {
 	 */
 	@Override
 	public boolean isFull() {
-		// TODO 04 return true if no further element can be inserted to the heap
-		return size() == heap.length;
+		return size == heap.length;
 	}
 
 	/**
@@ -58,6 +57,9 @@ class Heap<K> implements PriorityQueue<K> {
 	 */
 	@Override
 	public void clear() {
+		for (int i = 0; i < size; i++) {
+			heap[i] = null;
+		}
 		size = 0;
 	}
 
@@ -91,12 +93,13 @@ class Heap<K> implements PriorityQueue<K> {
 	 */
 	@Override
 	public K removeMin() throws QueueEmptyException {
-		HeapNode<K> rootNode = heap[0];
+		if (isEmpty()) throw new QueueEmptyException();
+		K result = heap[0].element;
 		heap[0] = heap[size - 1];
 		heap[size - 1] = null;
 		size--;
 		siftDown(0);
-		return rootNode.element;
+		return result;
 	}
 
 	/**
@@ -170,15 +173,12 @@ class Heap<K> implements PriorityQueue<K> {
 	 * @param index index of the element to delete.
 	 */
 	public void delete(int index) {
-		if (index == 0) {
-			try {
-				removeMin();
-			} catch (QueueEmptyException qee) {
-				qee.printStackTrace();
-			}
-		} else if (heap[2*index+1] != null && heap[2*index + 2] != null) {
-			
-		}
+		if (index >= size || index < 0) throw new IndexOutOfBoundsException();
+		heap[index] = heap[size-1];
+		heap[size -1] = null;
+		size--;
+		siftDown(index);
+		siftUp(index);
 	}
 
 
