@@ -65,7 +65,10 @@ public class MyHashSet<E> implements Set<E> {
 			cnt++;
 		}
 		if (e.equals(table[i])) return false;
-		if (size == table.length) throw new IllegalStateException("HashTable is full.");
+		if (cnt == table.length) throw new IllegalStateException("HashTable is full.");
+		if (table[i] == sentinel && contains(e)) {
+			return false;
+		}
 		table[i] = e;
 		size++;
 		return true;
@@ -115,7 +118,19 @@ public class MyHashSet<E> implements Set<E> {
 	@Override
 	public boolean remove(Object o) {
 		if (o == null) throw new NullPointerException("Null not allowed");
-		// TODO: Aufgabe 4
+		int i = (o.hashCode() & 0x7fffffff) % table.length;
+		int step = 1 + (o.hashCode() & 0x7fffffff) % table.length;
+		int cnt = 0;
+		while (!o.equals(table[i]) && cnt != table.length) {
+			i = (i + step) % table.length;
+			cnt++;
+		}
+		if (o.equals(table[i])) {
+			table[i] = sentinel;
+			size--;
+			return true;
+		}
+
 		return false;
 	}
 
